@@ -87,6 +87,15 @@ def readFolderData(location):
 
     return totalInput, totalOutput
 
+def readFolderFileNames(location):
+    for file in os.listdir(location):
+        print(file)
+        if file.endswith(".txt"):
+            if not "fileNames" in locals():
+                fileNames = [np.array(file, dtype=np.str)]
+            else:
+                fileNames = np.append(fileNames, [np.array(file, dtype=np.str)], axis=0)
+    return fileNames
 
 def loadModel(modelSpecs):
     MODELPATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "model"))

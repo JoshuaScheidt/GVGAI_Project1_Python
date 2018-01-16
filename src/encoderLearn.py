@@ -34,26 +34,26 @@ HISTORYPATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "history")
 # Define model representation
 dimensions = [
     len(inputObject[0]),
-    43,
+    # 43,
     38,
-    33,
+    # 33,
     28,
-    23,
+    # 23,
     18,
-    13,
+    # 13,
     8,
     3,
     8,
-    13,
+    # 13,
     18,
-    23,
+    # 23,
     28,
-    33,
+    # 33,
     38,
-    43,
+    # 43,
     len(outputObject[0])
 ]
-activations = ["sigmoid", "sigmoid", "sigmoid", "sigmoid", "sigmoid", "sigmoid", "sigmoid", "sigmoid", "sigmoid", "sigmoid", "sigmoid", "sigmoid", "sigmoid", "sigmoid", "sigmoid", "sigmoid", "sigmoid", "sigmoid"]
+activations = ["sigmoid", "sigmoid", "sigmoid", "sigmoid", "sigmoid", "sigmoid", "sigmoid", "sigmoid", "sigmoid", "sigmoid", "sigmoid"]
 loss = "mean_squared_error"
 optimizer = "adam"
 

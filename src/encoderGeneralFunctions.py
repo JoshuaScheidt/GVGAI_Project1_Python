@@ -74,6 +74,46 @@ def readJsonData(location):
 
     return totalInput, totalOutput
 
+def readJsonDataAutoEncode(location):
+    if not os.path.exists(location):
+        print("The datafile does not exist")
+        quit()
+
+    jsonObject = json.load(open(location))
+    keys = ["gameScore", "avatarHealthPoints", "avatarSpeed", "avatarOrientation", "avatarPosition", "observations"]
+    observationKeys = ["sqDist", "category", "position"]
+    totalVars = 1+1+1+2+2+10*(1+1+2)
+    totalInput= np.zeros((len(jsonObject), totalVars+1), dtype=np.float64)
+    for i in range(0, len(jsonObject)):
+        if "action" not in jsonObject[i] and "state" not in jsonObject[i] and "newState" not in jsonObject[i]:
+            print("Index "+i+" does not contain action, state or newState")
+            quit()
+
+        jsonState = jsonObject[i]["state"]
+
+        jsonStateObservation = jsonState["observations"]
+        for j in range(0, len(jsonStateObservation)):
+            for key in observationKeys:
+                if key not in jsonStateObservation[j]:
+                    print("Key " + key + " not found in observation index "+j+" in 'state' of json object " + str(i))
+                    quit()
+
+        totalInput[i][0] = jsonState[keys[0]]
+        totalInput[i][1] = jsonState[keys[1]]
+        totalInput[i][2] = jsonState[keys[2]]
+        totalInput[i][3] = jsonState[keys[3]][0]
+        totalInput[i][4] = jsonState[keys[3]][1]
+        totalInput[i][5] = jsonState[keys[4]][0]
+        totalInput[i][6] = jsonState[keys[4]][1]
+
+        for j in range(0, len(jsonStateObservation)):
+            totalInput[i][7+j*4] = jsonStateObservation[j][observationKeys[0]]
+            totalInput[i][8+j*4] = jsonStateObservation[j][observationKeys[1]]
+            totalInput[i][9+j*4] = jsonStateObservation[j][observationKeys[2]][0]
+            totalInput[i][10+j*4] = jsonStateObservation[j][observationKeys[2]][1]
+
+    return totalInput
+
 def readFolderData(location):
     for file in os.listdir(location):
         if file.endswith(".txt"):
@@ -86,6 +126,17 @@ def readFolderData(location):
                 totalOutput = np.concatenate((totalOutput, outputObject))
 
     return totalInput, totalOutput
+
+def readFolderDataAutoEncode(location):
+    for file in os.listdir(location):
+        if file.endswith(".txt"):
+            (inputObject, outputObject) = readJsonDataAutoEncode(os.path.abspath(os.path.join(location, file)))
+            if not "totalInput" in locals():
+                totalInput = inputObject
+            else:
+                totalInput = np.concatenate((totalInput, inputObject))
+
+    return totalInput
 
 def readFolderFileNames(location):
     for file in os.listdir(location):

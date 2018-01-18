@@ -130,7 +130,7 @@ def readFolderData(location):
 def readFolderDataAutoEncode(location):
     for file in os.listdir(location):
         if file.endswith(".txt"):
-            (inputObject, outputObject) = readJsonDataAutoEncode(os.path.abspath(os.path.join(location, file)))
+            (inputObject) = readJsonDataAutoEncode(os.path.abspath(os.path.join(location, file)))
             if not "totalInput" in locals():
                 totalInput = inputObject
             else:
